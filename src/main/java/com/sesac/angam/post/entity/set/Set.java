@@ -1,5 +1,6 @@
 package com.sesac.angam.post.entity.set;
 
+import com.sesac.angam.user.entity.User;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,4 +16,7 @@ public class Set {
     private EstimateStatus estimateStatus;
     @Enumerated(EnumType.STRING)
     private PickupStatus pickUpStatus;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="users")
+    private User user;
 }

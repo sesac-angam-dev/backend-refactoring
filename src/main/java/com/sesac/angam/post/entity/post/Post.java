@@ -1,5 +1,6 @@
 package com.sesac.angam.post.entity.post;
 
+import com.sesac.angam.post.entity.set.Set;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,4 +22,7 @@ public class Post {
     private WearNum wearNum;
     @Enumerated(EnumType.STRING)
     private SaleStatus saleStatus;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="set_id")
+    private Set set;
 }
