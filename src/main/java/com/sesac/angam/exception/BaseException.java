@@ -6,7 +6,7 @@ import lombok.Getter;
 public class BaseException extends RuntimeException{
     private ExceptionCode code;
 
-    BaseException(ExceptionCode code) {
+    public BaseException(ExceptionCode code) {
         this.code = code;
     }
 }
