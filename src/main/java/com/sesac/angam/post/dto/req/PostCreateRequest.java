@@ -1,32 +1,50 @@
 package com.sesac.angam.post.dto.req;
 
+import com.sesac.angam.post.entity.post.Post;
+import com.sesac.angam.post.entity.post.SaleStatus;
 import com.sesac.angam.post.entity.post.Size;
 import com.sesac.angam.post.entity.post.WearNum;
-import lombok.Builder;
-import org.antlr.v4.runtime.misc.NotNull;
+import com.sesac.angam.post.entity.set.Set;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
 
+@Getter
+@NoArgsConstructor
 public class PostCreateRequest {
 
-    @NotNull
-    private final String title;
-    @NotNull
-    private final String brand;
-    @NotNull
-    private final int purchasePrice;
-    private final String history;
-    @NotNull
-    private final Size size;
-    @NotNull
-    private final WearNum wearNum;
+    private String title;
+    private String brand;
+    private int purchasePrice;
+    private String history;
+    private Size size;
+    private WearNum wearNum;
+    private List<String> keywords;
 
-    @Builder
-    private PostCreateRequest(String title, String brand, String size, int purchasePrice, WearNum wearNum, String history) {
+    private PostCreateRequest(String title, String brand, int purchasePrice, String history, Size size, WearNum wearNum, List<String> keywords) {
         this.title = title;
         this.brand = brand;
-        this.size = Size.from(size);
         this.purchasePrice = purchasePrice;
-        this.wearNum = wearNum;
         this.history = history;
+        this.size = size;
+        this.wearNum = wearNum;
+        this.keywords = keywords;
     }
+
+    public Post toEntity(Set set) {
+        return Post.builder()
+                .brand(this.brand)
+                .title(this.title)
+                .history(this.history)
+                .saleStatus(SaleStatus.BEFORE_SALE)
+                .wearNum(this.wearNum)
+                .purchasePrice(this.purchasePrice)
+                .size(this.size)
+                .set(set)
+                .pickupRequested(false)
+                .isDeleted(false)
+                .build();
+    }
+
 }
