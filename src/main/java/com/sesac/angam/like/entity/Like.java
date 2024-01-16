@@ -30,4 +30,8 @@ public class Like {
         this.user = user;
         this.post = post;
     }
+
+    public void changeLikeStatusDeleted() {
+        this.isDeleted = true;
+    }
 }

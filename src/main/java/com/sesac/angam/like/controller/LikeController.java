@@ -1,6 +1,7 @@
 package com.sesac.angam.like.controller;
 
 import com.sesac.angam.like.dto.res.LikeCreateResponse;
+import com.sesac.angam.like.dto.res.LikeDeleteResponse;
 import com.sesac.angam.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +18,10 @@ public class LikeController {
             @PathVariable Long postId,
             @PathVariable Long userId) {
         return ResponseEntity.ok(likeService.createLike(userId, postId));
+    }
+
+    @PostMapping("/post/like/{likeId}")
+    public ResponseEntity<LikeDeleteResponse> deleteLike(@PathVariable Long likeId) {
+        return ResponseEntity.ok(likeService.changeLikeStatusDeleted(likeId));
     }
 }
