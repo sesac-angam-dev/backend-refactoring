@@ -1,5 +1,7 @@
 package com.sesac.angam.post.service;
 
+import com.sesac.angam.exception.BaseException;
+import com.sesac.angam.like.service.LikeService;
 import com.sesac.angam.post.dto.req.PostCreateRequest;
 import com.sesac.angam.post.dto.req.PostCreateRequests;
 import com.sesac.angam.post.dto.res.PostCreateResponse;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.sesac.angam.exception.ExceptionCode.POST_NOT_FOUND;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ public class PostService {
     private final UserUtil userUtil;
     private final SetRepository setRepository;
     private final PostRepository postRepository;
+    private final LikeService likeService;
     private final KeywordService keywordService;
 
     @Transactional
@@ -33,6 +38,11 @@ public class PostService {
         List<Post> posts = createPosts(set, requests);
 
         return PostCreateResponse.fromEntity(set, posts);
+    }
+
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new BaseException(POST_NOT_FOUND));
     }
 
     private List<Post> createPosts(Set set, PostCreateRequests requests) {
