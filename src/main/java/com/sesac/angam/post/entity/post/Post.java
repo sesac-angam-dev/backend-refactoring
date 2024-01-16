@@ -1,8 +1,12 @@
 package com.sesac.angam.post.entity.post;
 
+import com.sesac.angam.like.entity.Like;
 import com.sesac.angam.post.entity.set.Set;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -30,4 +34,8 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="set_id")
     private Set set;
+//    @OneToMany(mappedBy = "post")
+//    private List<PostKeyword> postKeywords = new ArrayList<>();
+//    @OneToMany(mappedBy = "post")
+//    private List<Like> likes = new ArrayList<>();
 }

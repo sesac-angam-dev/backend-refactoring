@@ -5,13 +5,15 @@ import com.sesac.angam.like.service.LikeService;
 import com.sesac.angam.post.dto.req.PostCreateRequest;
 import com.sesac.angam.post.dto.req.PostCreateRequests;
 import com.sesac.angam.post.dto.res.PostCreateResponse;
+import com.sesac.angam.post.dto.res.PostReadResponse;
+import com.sesac.angam.post.dto.res.PostReadResponses;
 import com.sesac.angam.post.entity.post.Post;
 import com.sesac.angam.post.entity.set.Set;
 import com.sesac.angam.post.repository.PostRepository;
 import com.sesac.angam.post.repository.SetRepository;
 import com.sesac.angam.user.entity.User;
 import com.sesac.angam.util.UserUtil;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,24 @@ public class PostService {
         List<Post> posts = createPosts(set, requests);
 
         return PostCreateResponse.fromEntity(set, posts);
+    }
+
+    @Transactional(readOnly = true)
+    public PostReadResponses getPostsEstimating(Long userId) {
+        List<Post> posts = postRepository.findAllPostsBeforeEstimateCompleted();
+
+        List<PostReadResponse> postReadResponses = posts.stream()
+                .map(post -> getPostEstimating(userId, post))
+                .collect(Collectors.toList());
+
+        return new PostReadResponses(postReadResponses);
+    }
+
+    private PostReadResponse getPostEstimating(Long userId, Post post) {
+        List<String> keywords = keywordService.getKeywords(post);
+        boolean isLiked = likeService.isLiked(userId, post);
+
+        return PostReadResponse.fromEntity(post, keywords, isLiked);
     }
 
     private Post getPost(Long postId) {

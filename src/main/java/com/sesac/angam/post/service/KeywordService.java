@@ -25,6 +25,10 @@ public class KeywordService {
                 .forEach(keyword -> saveKeyword(post, keyword));
     }
 
+    public List<String> getKeywords(Post post) {
+        return postKeywordRepository.findAllByPost(post);
+    }
+
     private Keyword createKeyword(List<Keyword> foundKeywords, String keyword) {
         return foundKeywords.stream()
                 .filter(foundKeyword -> foundKeyword.equals(keyword))

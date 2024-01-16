@@ -44,13 +44,22 @@ public class LikeService {
 
     }
 
+    public boolean isLiked(Long userId, Post post) {
+        User user = userUtil.getUser(userId);
+
+        if (likeRepository.existsByUserAndPostAndIsDeletedIsFalse(user, post)) {
+            return true;
+        }
+        return false;
+    }
+
     private Like getLike(Long likeId) {
         return likeRepository.findById(likeId)
                 .orElseThrow(() -> new BaseException(LIKE_NOT_FOUND));
     }
 
     private void validateLikeExistence(User user, Post post) {
-        if(likeRepository.existsByUserAndPostAndIsDeletedIsFalse(user, post)) {
+        if (likeRepository.existsByUserAndPostAndIsDeletedIsFalse(user, post)) {
             throw new BaseException(POST_ALREADY_LIKED);
         }
     }
