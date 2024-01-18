@@ -1,4 +1,4 @@
-package com.sesac.angam.util;
+package com.sesac.angam.user.service;
 
 import com.sesac.angam.exception.BaseException;
 import com.sesac.angam.exception.ExceptionCode;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserUtil {
+public class UserService {
     private final UserRepository userRepository;
 
     public User getUser(Long userId) {
