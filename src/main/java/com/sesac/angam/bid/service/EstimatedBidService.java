@@ -19,11 +19,13 @@ public class EstimatedBidService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public EstimatedBid createBid(Long userId, BidCreateRequest request) {
+    public BidCreateResponse createBid(Long userId, BidCreateRequest request) {
         User user = userRepository.getById(userId);
         Post post = postRepository.getById(request.getPostId());
 
-        return estimatedBidRepository.save(request.toEntity(user, post));
+        EstimatedBid estimatedBid = estimatedBidRepository.save(request.toEntity(user, post));
+
+        return BidCreateResponse.fromEntity(estimatedBid);
     }
 
 }

@@ -2,7 +2,6 @@ package com.sesac.angam.bid.controller;
 
 import com.sesac.angam.bid.dto.req.BidCreateRequest;
 import com.sesac.angam.bid.dto.res.BidCreateResponse;
-import com.sesac.angam.bid.entity.EstimatedBid;
 import com.sesac.angam.bid.service.EstimatedBidService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ public class EstimatedBidController {
 
     @PostMapping("/user/{userId}/estimated-bid")
     public ResponseEntity<BidCreateResponse> createBid(@PathVariable Long userId, @Validated @RequestBody BidCreateRequest request) {
-        EstimatedBid estimatedBid = estimatedBidService.createBid(userId, request);
-        return ResponseEntity.ok(BidCreateResponse.fromEntity(estimatedBid));
+        return ResponseEntity.ok(estimatedBidService.createBid(userId, request));
     }
 }
