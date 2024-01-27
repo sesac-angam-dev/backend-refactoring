@@ -27,5 +27,5 @@ public class EstimatedBid {
 
     private int bidAmount;
 
-    private boolean isDeleted=Boolean.FALSE;
+    private boolean isDeleted;
 }
