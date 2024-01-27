@@ -9,6 +9,7 @@ import com.sesac.angam.post.dto.res.PostReadResponses;
 import com.sesac.angam.post.entity.post.Post;
 import com.sesac.angam.post.entity.set.Set;
 import com.sesac.angam.post.repository.PostRepository;
+import com.sesac.angam.post.repository.SetRepository;
 import com.sesac.angam.user.entity.User;
 import com.sesac.angam.user.service.UserService;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +23,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
-    private final SetService setService;
     private final UserService userService;
+    private final SetRepository setRepository;
     private final PostRepository postRepository;
     private final LikeService likeService;
     private final KeywordService keywordService;
@@ -31,7 +32,7 @@ public class PostService {
     @Transactional
     public PostCreateResponse createPosts(Long userId, PostCreateRequests requests) {
         User user = userService.getUser(userId);
-        Set set = setService.save(Set.from(user));
+        Set set = setRepository.save(Set.from(user));
         List<Post> posts = createPosts(set, requests);
 
         return PostCreateResponse.fromEntity(set, posts);

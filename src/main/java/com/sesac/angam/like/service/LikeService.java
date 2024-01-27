@@ -6,6 +6,7 @@ import com.sesac.angam.like.dto.res.LikeDeleteResponse;
 import com.sesac.angam.like.entity.Like;
 import com.sesac.angam.post.entity.post.Post;
 import com.sesac.angam.like.repository.LikeRepository;
+import com.sesac.angam.post.service.PostService;
 import com.sesac.angam.user.entity.User;
 import com.sesac.angam.user.service.UserService;
 import com.sesac.angam.util.PostUtil;
