@@ -6,10 +6,9 @@ import com.sesac.angam.like.dto.res.LikeDeleteResponse;
 import com.sesac.angam.like.entity.Like;
 import com.sesac.angam.post.entity.post.Post;
 import com.sesac.angam.like.repository.LikeRepository;
-import com.sesac.angam.post.service.PostService;
+import com.sesac.angam.post.repository.PostRepository;
 import com.sesac.angam.user.entity.User;
 import com.sesac.angam.user.service.UserService;
-import com.sesac.angam.util.PostUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +21,13 @@ import static com.sesac.angam.exception.ExceptionCode.POST_ALREADY_LIKED;
 public class LikeService {
 
     private final UserService userService;
-    private final PostUtil postUtil;
+    private final PostRepository postRepository;
     private final LikeRepository likeRepository;
 
     @Transactional
     public LikeCreateResponse createLike(Long userId, Long postId) {
         User user = userService.getUser(userId);
-        Post post = postUtil.getPost(postId);
+        Post post = postRepository.getById(postId);
         validateLikeExistence(user, post);
 
         Like like = likeRepository.save(new Like(user, post));

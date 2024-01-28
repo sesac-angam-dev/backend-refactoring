@@ -11,6 +11,7 @@ import com.sesac.angam.post.entity.post.Post;
 import com.sesac.angam.post.repository.PostRepository;
 import com.sesac.angam.user.entity.User;
 import com.sesac.angam.user.repository.UserRepository;
+import com.sesac.angam.util.Calculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class EstimatedBidService {
     private final EstimatedBidRepository estimatedBidRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final Calculator calculator;
 
     @Transactional
     public BidCreateResponse createBid(Long userId, BidCreateRequest request) {
@@ -48,27 +50,19 @@ public class EstimatedBidService {
     }
 
     private BidReadResponse createBidResults(Post post) {
-        //입찰정보
-        List<UserBidInfoResponse> userBidInfoResponses = getUserBidInfoResponses(post);
+        List<EstimatedBid> estimatedBids = estimatedBidRepository.findAllByPost(post);
 
+        //입찰정보
+        List<UserBidInfoResponse> userBidInfoResponses = getUserBidInfoResponses(estimatedBids);
         //평균입찰가
-        double meanBidAmount = calculateMeanBidAmount(userBidInfoResponses);
+        double meanBidAmount = calculator.calculateMeanBidAmount(estimatedBids);
 
         return BidReadResponse.fromEntity(post, meanBidAmount, userBidInfoResponses);
     }
 
-    private List<UserBidInfoResponse> getUserBidInfoResponses(Post post) {
-        return estimatedBidRepository.findAllByPost(post).stream()
+    private List<UserBidInfoResponse> getUserBidInfoResponses(List<EstimatedBid> estimatedBids) {
+        return estimatedBids.stream()
                 .map(estimatedBid -> UserBidInfoResponse.fromEntity(estimatedBid))
                 .toList();
-    }
-
-    private double calculateMeanBidAmount(List<UserBidInfoResponse> userBidInfoResponses) {
-        int num = userBidInfoResponses.size();
-        int bidSum = userBidInfoResponses.stream()
-                .mapToInt(response -> response.getBidAmount())
-                .sum();
-
-        return (double) bidSum / num;
     }
 }
