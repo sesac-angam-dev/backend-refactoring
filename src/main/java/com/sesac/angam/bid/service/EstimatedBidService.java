@@ -4,7 +4,6 @@ import com.sesac.angam.bid.dto.req.BidCreateRequest;
 import com.sesac.angam.bid.dto.res.BidCreateResponse;
 import com.sesac.angam.bid.dto.res.BidReadResponse;
 import com.sesac.angam.bid.dto.res.BidReadResponses;
-import com.sesac.angam.bid.dto.res.UserBidInfoResponse;
 import com.sesac.angam.bid.entity.EstimatedBid;
 import com.sesac.angam.bid.repository.EstimatedBidRepository;
 import com.sesac.angam.post.entity.post.Post;
@@ -51,18 +50,6 @@ public class EstimatedBidService {
 
     private BidReadResponse createBidResults(Post post) {
         List<EstimatedBid> estimatedBids = estimatedBidRepository.findAllByPost(post);
-
-        //입찰정보
-        List<UserBidInfoResponse> userBidInfoResponses = getUserBidInfoResponses(estimatedBids);
-        //평균입찰가
-        double meanBidAmount = calculator.calculateMeanBidAmount(estimatedBids);
-
-        return BidReadResponse.fromEntity(post, meanBidAmount, userBidInfoResponses);
-    }
-
-    private List<UserBidInfoResponse> getUserBidInfoResponses(List<EstimatedBid> estimatedBids) {
-        return estimatedBids.stream()
-                .map(estimatedBid -> UserBidInfoResponse.fromEntity(estimatedBid))
-                .toList();
+        return BidReadResponse.fromEntity(post, estimatedBids, calculator);
     }
 }

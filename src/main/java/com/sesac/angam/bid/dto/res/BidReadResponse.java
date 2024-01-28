@@ -1,6 +1,8 @@
 package com.sesac.angam.bid.dto.res;
 
+import com.sesac.angam.bid.entity.EstimatedBid;
 import com.sesac.angam.post.entity.post.Post;
+import com.sesac.angam.util.Calculator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +27,19 @@ public class BidReadResponse {
         this.userBidInfoResponses = userInfoResponses;
     }
 
-    public static BidReadResponse fromEntity(Post post, Double meanBidAmount, List<UserBidInfoResponse> userInfoResponses) {
+    public static BidReadResponse fromEntity(Post post, List<EstimatedBid> estimatedBids, Calculator calculator) {
         return BidReadResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .brand(post.getBrand())
-                .meanBidAmount(meanBidAmount)
-                .userInfoResponses(userInfoResponses)
+                .meanBidAmount(calculator.calculateMeanBidAmount(estimatedBids))
+                .userInfoResponses(getUserBidInfoResponses(estimatedBids))
                 .build();
+    }
+
+    private static List<UserBidInfoResponse> getUserBidInfoResponses(List<EstimatedBid> estimatedBids) {
+        return estimatedBids.stream()
+                .map(estimatedBid -> UserBidInfoResponse.fromEntity(estimatedBid))
+                .toList();
     }
 }
